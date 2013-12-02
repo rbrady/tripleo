@@ -9,6 +9,6 @@ for ID in $(glance image-list | grep "\(bm-deploy\|overcloud-compute\|overcloud-
 done
 
 rm -rf $IMAGES_DIR/overcloud-control.qcow2*
-rm -rf $IMAGES_DIR/overcloud-compute.qcow2*
+#rm -rf $IMAGES_DIR/overcloud-compute.qcow2*
 
 echo "Done cleaning images"
