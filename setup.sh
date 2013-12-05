@@ -3,6 +3,7 @@
 set -eux
 
 # install prereqs
+sudo yum install -y git vim
 
 # get extras
 
