@@ -1,0 +1,18 @@
+#!/bin/bash
+
+export TRIPLEO_ROOT=~/tripleo
+export PATH=$TRIPLEO_ROOT/tripleo-incubator/scripts:$PATH
+export UNDERCLOUD_IP=`get-vm-ip undercloud`
+#source $TRIPLEO_ROOT/tripleo-overcloud-passwords
+export OVERCLOUD_LIBVIRT_TYPE=${OVERCLOUD_LIBVIRT_TYPE:-";NovaComputeLibvirtType=qemu"}
+export NeutronPublicInterface=${NeutronPublicInterface:-'eth0'}
+export LIBVIRT_DEFAULT_URI="qemu:///system"
+export UNDERCLOUD_ADMIN_PASSWORD=unset
+#source $TRIPLEO_ROOT/tripleo-incubator/undercloudrc
+export NODE_CPU=1 NODE_MEM=2048 NODE_DISK=20 NODE_ARCH=amd64
+#source $TRIPLEO_ROOT/tripleorc
+export NODE_DIST="fedora selinux-permissive"
+export DIB_COMMON_ELEMENTS=${DIB_COMMON_ELEMENTS:-"stackuser"}
+export ELEMENTS_PATH=$TRIPLEO_ROOT/tripleo-image-elements/elements
+#export ELEMENTS_PATH=~/cinder/tripleo-image-elements-rjb/elements
+

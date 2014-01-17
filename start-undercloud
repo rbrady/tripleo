@@ -1,0 +1,23 @@
+#!/bin/bash
+
+set -eu
+
+(virsh pool-list --all --persistent | grep -q default) || \
+    (virsh pool-define-as --name default dir --target /var/lib/libvirt/images; \
+     virsh pool-autostart default; \
+     virsh pool-start default) 
+virsh vol-create-as default undercloud.qcow2 20G --format qcow2
+virsh vol-upload --pool default undercloud.qcow2 undercloud.qcow2
+configure-vm \
+    --name undercloud \
+    --image /var/lib/libvirt/images/undercloud.qcow2 \
+    --seed \
+    --libvirt-nic-driver virtio \
+    --arch x86_64 \
+    --memory 2097152 \
+    --cpus 1 
+export UNDERCLOUD_CONFIG_DRIVE_ISO=$(undercloud-config-drive)
+virsh attach-disk undercloud \
+    $UNDERCLOUD_CONFIG_DRIVE_ISO hda \
+    --type cdrom --sourcetype file --persistent
+virsh start undercloud
