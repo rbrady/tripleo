@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -eux
+
+node_ids=$(nova baremetal-node-list | grep undercloud | awk -F "| " '{ print $2; }')
+
+for id in $node_ids; do
+    nova baremetal-node-delete $id
+done
+
+glance image-delete bm-deploy-kernel || true
+glance image-delete bm-deploy-ramdisk || true
+
+nova flavor-delete baremetal || true
