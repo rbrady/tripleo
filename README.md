@@ -1,4 +1,4 @@
-flaming-octo-tyrion
+tripleo
 ===================
 
-random scripts I need for devtest at the moment
+The files I use with Tripleo products (devtest, instack, etc).
