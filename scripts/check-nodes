@@ -1,0 +1,13 @@
+#!/bin/bash
+
+set -eux
+
+node_ids=$(nova baremetal-node-list | grep undercloud | awk -F "| " '{print $2; }')
+for id in $node_ids; do
+  echo $(nova baremetal-node-show $id | grep uuid)
+done
+
+nova hypervisor-list
+
+
+

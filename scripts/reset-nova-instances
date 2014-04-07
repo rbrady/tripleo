@@ -1,0 +1,14 @@
+#!/bin/bash
+
+set -eu
+
+nova_ids=$(nova list | awk -F "| " '{print $2; }')
+for instance in $nova_ids; do
+  if [ ! $instance = "ID" ]; then
+    nova reset-state --active $instance    
+  fi
+done
+
+
+
+

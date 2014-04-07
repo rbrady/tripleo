@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -eu
+
+reset-nova-instances
+clean-nova-instances
+clean-setup-baremetal
+sudo systemctl restart openstack-nova-compute
+sudo systemctl restart openstack-nova-conductor
+sudo systemctl restart openstack-nova-api
+sudo systemctl restart openstack-nova-scheduler
+heat stack-delete overcloud
