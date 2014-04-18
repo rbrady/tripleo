@@ -1,0 +1,5 @@
+#!/bin/bash
+
+set -eu
+
+gsettings set org.gnome.shell always-show-log-out true
