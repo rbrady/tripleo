@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -eu
+
+export NODE_DISK=30
+export UNDERCLOUD_ROOT_PASSWORD=redhat
+instack-virt-setup
+
+virsh start instack
+sleep 20
+cat /var/lib/libvirt/dnsmasq/default.leases | grep $(tripleo get-vm-mac instack) | awk '{print $3;}'
+for i in $(seq 0 3); do echo -n $(tripleo get-vm-mac baremetal_$i) " "; done; echo

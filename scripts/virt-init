@@ -1,0 +1,29 @@
+#!/bin/bash
+
+set -eu
+
+curl -L -O https://raw.githubusercontent.com/rbrady/tripleo/master/scripts/fedora-prep
+chmod a+x fedora-prep
+sudo ./fedora-prep stack
+
+echo 'export LIBVIRT_DEFAULT_URI="qemu:///system"' >> ~/.bashrc
+
+sudo yum -y install http://repos.fedorapeople.org/repos/openstack-m/openstack-m/openstack-m-release-icehouse-2.noarch.rpm
+
+sudo yum -y install yum-utils
+sudo yum-config-manager --enable fedora-openstack-m-testing
+
+sudo yum -y install instack-undercloud
+
+gsettings set org.gnome.shell always-show-log-out true
+
+sudo yum install -y libguestfs-tools virt-manager
+source /usr/libexec/openstack-tripleo/devtest_variables.sh
+tripleo install-dependencies
+
+git clone https://github.com/rbrady/tripleo.git
+echo 'export PATH=~/tripleo/scripts:$PATH' >> ~/.bashrc
+
+
+
+
