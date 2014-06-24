@@ -89,10 +89,10 @@ The images created by diskimage-builder using tripleo-image-elements contain dir
 ::
 
     ~/elements/mysql$ tree
-        .
-        └── etc
-            └── mysql
-                └── mysql.conf
+    .
+    └── etc
+        └── mysql
+            └── mysql.conf
 
 By default, os-apply-config will read config files according to the contents of the file /var/lib/os-collect-config/os_config_files.json.  Here is a simple example from the mysql-common element:
 
