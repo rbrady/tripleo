@@ -20,19 +20,23 @@ Using TripleO to deploy an OpenStack cloud consists of four phases:
 
 
 1. **Preparation**
+
 - Install Deployment cloud
 - Create images to establish the Workload cloud
 - Create a Heat template describing the Workload cloud containing references to your images
 
 2. **Deployment**
+
 - Use Heat to deploy your template
 - Heat will use Nova to identify and reserve the appropriate nodes
 - Nova will use Ironic to startup nodes and install the correct images
 
 3. **Per-node setup**
+
  - When each node of the Workload cloud starts it will gather its configuration metadata from Heat Templated configuration files on the node are updated with values from the metadata
 
 4. **Workload cloud initialization**
+
  - Services on nodes of the Workload cloud are registered with Keystone
 
 
@@ -45,6 +49,7 @@ The first step is to install the Deployment cloud. There are multiple ways this 
 
 Before deploying the Workload cloud, you must first build images which will be installed on each of the nodes of the Workload cloud.  TripleO uses diskimage-builder for building these so called “Golden Images”. The diskimage-builder tool takes a base image e.g. fedora or ubuntu, and then layers additional software, called “elements”, on top of that. The final result is a qcow2 formatted image with software installed but not configured. For example, to build an image which when configured would be able to run the Nova compute service, you would do the following:
 
+::
 
     disk-image-create -a amd64 -o compute-image fedora \
         nova-compute nova-kvm [other elements]
@@ -63,6 +68,8 @@ TripleO maintains a library of Heat templates in tripleo-heat-templates.  This l
 
 Deployment to physical servers happens through a collaboration of Heat, Nova, Neutron, Glance and Ironic. To deploy the Workload cloud a call is made to the Heat API to create a stack using the Heat client cli e.g.
 
+::
+
     heat stack-create workload-cloud -f workload-heat-template.yml
 
 For each node in the Workload cloud, the Heat engine asks Nova-API to create an instance using the appropriate image as specified in the Heat template and then Nova-Scheduler selects a machine to deploy to.  Nova-Compute then uses the Ironic Service as a bare metal hypervisor to deploy that image to the selected machine.  The Ironic service uses PXE and IPMI to complete the deployment of the image. See Ironic’s “Understanding Baremetal Deployment” for further details.
@@ -72,10 +79,14 @@ For each node in the Workload cloud, the Heat engine asks Nova-API to create an 
 
 When a Workload node boots up, it runs os-collect-config.  The os-collect-config script saves data from the Heat metadata API locally and then calls os-refresh-config any time that metadata has changed.  Here is a simple example of some json-based metadata:
 
+::
+
     {"mysql": {"root-password": “Heifs23jk3”}}
 
 
 The images created by diskimage-builder using tripleo-image-elements contain directories of scripts and templated files based on the “elements” . When os-refresh-config runs it will execute those scripts and then call os-apply-config to combine the configuration files with the latest metadata.  The templated files are stored within elements in a directory structure that mimics the root file structure.
+
+::
 
     ~/elements/mysql$ tree
         .
