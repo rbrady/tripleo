@@ -1,0 +1,5 @@
+config:
+  version: 'icehouse'
+  pass: 'stack'
+  vm_ssh_port: '4067'
+  instack_undercloud_rpm: 'http://file.rdu.redhat.com/~rbrady/instack-undercloud-0.0.13-1.git.1.4d512d4.fc20.src.rpm'
