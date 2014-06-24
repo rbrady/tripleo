@@ -19,27 +19,27 @@ Deployment Workflow Overview
 Using TripleO to deploy an OpenStack cloud consists of four phases:
 
 
-1. Preparation
+1. **Preparation**
 - Install Deployment cloud
 - Create images to establish the Workload cloud
 - Create a Heat template describing the Workload cloud containing references to your images
 
-2. Deployment
+2. **Deployment**
 - Use Heat to deploy your template
 - Heat will use Nova to identify and reserve the appropriate nodes
 - Nova will use Ironic to startup nodes and install the correct images
 
-3. Per-node setup
+3. **Per-node setup**
  - When each node of the Workload cloud starts it will gather its configuration metadata from Heat Templated configuration files on the node are updated with values from the metadata
 
-4. Workload cloud initialization
+4. **Workload cloud initialization**
  - Services on nodes of the Workload cloud are registered with Keystone
 
 
 Deployment Workflow Detail
 ----------------------------
 
-1. Preparation
+1. **Preparation**
 
 The first step is to install the Deployment cloud. There are multiple ways this can be done, for example by following either the developer-based steps known as devtest or if you are running RDO you can run the Instack tools. This document will not focus on the individual steps needed to install the Deployment cloud but rather point out that it uses the tripleo-incubator repository which contains, among other things, scripts that will install needed dependencies.
 
@@ -59,7 +59,7 @@ TripleO uses Heat running on the Deployment cloud to orchestrate the actual depl
 TripleO maintains a library of Heat templates in tripleo-heat-templates.  This library also contains a script to merge combinations of templates to create a single Heat template file.
 
 
-2. Deployment
+2. **Deployment**
 
 Deployment to physical servers happens through a collaboration of Heat, Nova, Neutron, Glance and Ironic. To deploy the Workload cloud a call is made to the Heat API to create a stack using the Heat client cli e.g.
 
@@ -68,7 +68,7 @@ Deployment to physical servers happens through a collaboration of Heat, Nova, Ne
 For each node in the Workload cloud, the Heat engine asks Nova-API to create an instance using the appropriate image as specified in the Heat template and then Nova-Scheduler selects a machine to deploy to.  Nova-Compute then uses the Ironic Service as a bare metal hypervisor to deploy that image to the selected machine.  The Ironic service uses PXE and IPMI to complete the deployment of the image. See Ironic’s “Understanding Baremetal Deployment” for further details.
 
 
-3. Per-node setup
+3. **Per-node setup**
 
 When a Workload node boots up, it runs os-collect-config.  The os-collect-config script saves data from the Heat metadata API locally and then calls os-refresh-config any time that metadata has changed.  Here is a simple example of some json-based metadata:
 
@@ -85,6 +85,8 @@ The images created by diskimage-builder using tripleo-image-elements contain dir
 
 By default, os-apply-config will read config files according to the contents of the file /var/lib/os-collect-config/os_config_files.json.  Here is a simple example from the mysql-common element:
 
+::
+
     [client]
     user = root
     {{#mysql.root-password}}
@@ -93,10 +95,14 @@ By default, os-apply-config will read config files according to the contents of 
 
 Using the metadata example from above:
 
+::
+
     {"mysql": {"root-password": “Heifs23jk3”}}
 
 
 The call to os-apply-config would update the template with the value(s) in the metadata and the resulting file would look like:
+
+::
 
     [client]
     user = root
@@ -104,7 +110,7 @@ The call to os-apply-config would update the template with the value(s) in the m
 
 After the configuration files are updated, os-refresh-config runs the post-configure.d phase and starts or restarts services to apply the new configuration.
 
-4. Workload cloud initialization
+4. **Workload cloud initialization**
 
 After the Workload cloud has been deployed, the initialization of OpenStack services (e.g Keystone, Neutron, etc) needs to occur. That is accomplished today by scripts in the tripleo-incubator source repository.   In the near future, the cloud initialization tasks will be handled by os-cloud-config which contains common code, the seed initialisation logic, and the post heat completion initial configuration of a cloud.  There are three primary steps to completing the initialization:
 
