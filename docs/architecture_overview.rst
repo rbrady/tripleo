@@ -33,11 +33,11 @@ Using TripleO to deploy an OpenStack cloud consists of four phases:
 
 3. **Per-node setup**
 
- - When each node of the Workload cloud starts it will gather its configuration metadata from Heat Templated configuration files on the node are updated with values from the metadata
+- When each node of the Workload cloud starts it will gather its configuration metadata from Heat Templated configuration files on the node are updated with values from the metadata
 
 4. **Workload cloud initialization**
 
- - Services on nodes of the Workload cloud are registered with Keystone
+- Services on nodes of the Workload cloud are registered with Keystone
 
 
 Deployment Workflow Detail
