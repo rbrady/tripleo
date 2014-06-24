@@ -7,7 +7,7 @@ With TripleO, you start by creating a “Deployment cloud” (sometimes referred
 
 TripleO leverages several existing core components of OpenStack including Nova, Neutron, Heat, Glance and Ceilometer to deploy OpenStack on hardware.  Nova and Ironic are used in the Deployment cloud to manage bare metal instances that comprise the infrastructure for the Workload cloud.  Neutron is utilized to provide a networking environment in which to deploy the Workload cloud, machine images are stored in Glance and Ceilometer collects metrics about your Workload cloud.
 
-[image]
+.. image:: overview.svg
 
 The following diagram illustrates a physical view of how the Deployment cloud may be hosted on one physical server and the Workload cloud distributed across many physical servers.
 
