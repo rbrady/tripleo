@@ -20,14 +20,14 @@ Using TripleO to deploy an OpenStack cloud consists of four phases:
 
 
 1. Preparation
- - Install Deployment cloud
- - Create images to establish the Workload cloud
- - Create a Heat template describing the Workload cloud containing references to your images
+- Install Deployment cloud
+- Create images to establish the Workload cloud
+- Create a Heat template describing the Workload cloud containing references to your images
 
 2. Deployment
- - Use Heat to deploy your template
- - Heat will use Nova to identify and reserve the appropriate nodes
- - Nova will use Ironic to startup nodes and install the correct images
+- Use Heat to deploy your template
+- Heat will use Nova to identify and reserve the appropriate nodes
+- Nova will use Ironic to startup nodes and install the correct images
 
 3. Per-node setup
  - When each node of the Workload cloud starts it will gather its configuration metadata from Heat Templated configuration files on the node are updated with values from the metadata
@@ -49,6 +49,7 @@ Before deploying the Workload cloud, you must first build images which will be i
     disk-image-create -a amd64 -o compute-image fedora \
         nova-compute nova-kvm [other elements]
 
+
 While the diskimage-builder repository provides operating-system specific elements, ones specific to OpenStack, e.g. nova-api, are found in tripleo-image-elements.  You can add different elements to an image to provide specific applications and services.   Once all the images required to deploy the Workload cloud are built, they are stored in Glance running on the Deployment cloud.
 
 Once the images needed for the Workload cloud have been created and the Deployment cloud installed, the next step is construct a deployment plan to describe what you want the Workload cloud to look like e.g. what OpenStack services should be deployed on how many nodes.  You will also register the hardware available to deploy the Workload cloud to.
@@ -56,8 +57,6 @@ Once the images needed for the Workload cloud have been created and the Deployme
 TripleO uses Heat running on the Deployment cloud to orchestrate the actual deployment of the Workload cloud, so constructing a deployment plan consists of creating a Heat template. Heat provides template based orchestration for describing an application by executing appropriate OpenStack API calls to generate a running application.  Heat integrates core components of OpenStack into a one-file template system. The templates allow creation of most OpenStack resource types (such as instances, floating ips, volumes, security groups, users, etc), as well as some more advanced functionality such as instance high availability, instance autoscaling, and nested stacks.
 
 TripleO maintains a library of Heat templates in tripleo-heat-templates.  This library also contains a script to merge combinations of templates to create a single Heat template file.
-
-
 
 
 2. Deployment
@@ -75,12 +74,13 @@ When a Workload node boots up, it runs os-collect-config.  The os-collect-config
 
     {"mysql": {"root-password": “Heifs23jk3”}}
 
+
 The images created by diskimage-builder using tripleo-image-elements contain directories of scripts and templated files based on the “elements” . When os-refresh-config runs it will execute those scripts and then call os-apply-config to combine the configuration files with the latest metadata.  The templated files are stored within elements in a directory structure that mimics the root file structure.
     ~/elements/mysql$ tree
-    .
-    └── etc
-        └── mysql
-            └── mysql.conf
+        .
+        └── etc
+            └── mysql
+                └── mysql.conf
 
 By default, os-apply-config will read config files according to the contents of the file /var/lib/os-collect-config/os_config_files.json.  Here is a simple example from the mysql-common element:
 
@@ -94,6 +94,7 @@ Using the metadata example from above:
 
     {"mysql": {"root-password": “Heifs23jk3”}}
 
+
 The call to os-apply-config would update the template with the value(s) in the metadata and the resulting file would look like:
 
     [client]
@@ -106,12 +107,11 @@ After the configuration files are updated, os-refresh-config runs the post-confi
 
 After the Workload cloud has been deployed, the initialization of OpenStack services (e.g Keystone, Neutron, etc) needs to occur. That is accomplished today by scripts in the tripleo-incubator source repository.   In the near future, the cloud initialization tasks will be handled by os-cloud-config which contains common code, the seed initialisation logic, and the post heat completion initial configuration of a cloud.  There are three primary steps to completing the initialization:
 
- - Initializing Identity Services (Keystone)
- - Registering service endpoints (e.g. Glance, Nova)
- - Specify a block of IP addresses for Workload cloud instances (Neutron)
+- Initializing Identity Services (Keystone)
+- Registering service endpoints (e.g. Glance, Nova)
+- Specify a block of IP addresses for Workload cloud instances (Neutron)
 
 The first step initializes Keystone for use with normal authentication by creating the admin and service tenants, the admin and Member roles, the admin user, configure certificates and finally registers the initial identity endpoint.  The next step registers image, orchestration, network and compute services running on the default ports on the controlplane node.  Finally, Neutron is given a starting IP address, ending IP address, and a CIDR notation to represent the subnet for the block of floating IP addresses that will be used within the Workload cloud.
-
 
 
 Managing the deployment
