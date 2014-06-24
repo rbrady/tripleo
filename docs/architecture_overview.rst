@@ -47,7 +47,7 @@ Deployment Workflow Detail
 
 1. **Preparation**
 
-The first step is to install the Deployment cloud. There are multiple ways this can be done, for example by following either the developer-based steps known as devtest or if you are running RDO you can run the Instack tools. This document will not focus on the individual steps needed to install the Deployment cloud but rather point out that it uses the tripleo-incubator repository which contains, among other things, scripts that will install needed dependencies.
+The first step is to install the Deployment cloud. There are multiple ways this can be done, for example by following either the developer-based steps known as `devtest <http://docs.openstack.org/developer/tripleo-incubator/devtest.html>`_ or if you are running RDO you can run the Instack tools. This document will not focus on the individual steps needed to install the Deployment cloud but rather point out that it uses the tripleo-incubator repository which contains, among other things, scripts that will install needed dependencies.
 
 Before deploying the Workload cloud, you must first build images which will be installed on each of the nodes of the Workload cloud.  TripleO uses diskimage-builder for building these so called “Golden Images”. The diskimage-builder tool takes a base image e.g. fedora or ubuntu, and then layers additional software, called “elements”, on top of that. The final result is a qcow2 formatted image with software installed but not configured. For example, to build an image which when configured would be able to run the Nova compute service, you would do the following:
 
