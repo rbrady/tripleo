@@ -76,6 +76,7 @@ When a Workload node boots up, it runs os-collect-config.  The os-collect-config
 
 
 The images created by diskimage-builder using tripleo-image-elements contain directories of scripts and templated files based on the “elements” . When os-refresh-config runs it will execute those scripts and then call os-apply-config to combine the configuration files with the latest metadata.  The templated files are stored within elements in a directory structure that mimics the root file structure.
+
     ~/elements/mysql$ tree
         .
         └── etc
