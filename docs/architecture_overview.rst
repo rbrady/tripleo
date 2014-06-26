@@ -3,17 +3,17 @@ TripleO Architecture Overview
 
 TripleO is the friendly name for “OpenStack on OpenStack”.  It is an official OpenStack program with the goal of allowing you to deploy a production cloud onto bare metal hardware using a subset of existing OpenStack components.  Ultimately TripleO will provide a complete end-to-end infrastructure management solution for OpenStack business planning, system deployment and operations.
 
-.. image:: overview.svg
+.. image:: overview.png
 
 With TripleO, you start by creating a “Deployment cloud” (sometimes referred to as “undercloud”) that will contain the necessary OpenStack components to deploy and manage a “Workload cloud” (sometimes referred to as “overcloud”).  The Workload cloud is the deployed solution and can represent a cloud for any purpose (e.g. production, staging, test, etc).  The operator can choose any OpenStack components they want for the Workload cloud using the tools described in the rest of this document.
 
-.. image:: logical_view.svg
+.. image:: logical_view.png
 
 TripleO leverages several existing core components of OpenStack including Nova, Neutron, Heat, Glance and Ceilometer to deploy OpenStack on hardware.  Nova and Ironic are used in the Deployment cloud to manage bare metal instances that comprise the infrastructure for the Workload cloud.  Neutron is utilized to provide a networking environment in which to deploy the Workload cloud, machine images are stored in Glance and Ceilometer collects metrics about your Workload cloud.
 
 The following diagram illustrates a physical view of how the Deployment cloud may be hosted on one physical server and the Workload cloud distributed across many physical servers.
 
-.. image:: physical_view.svg
+.. image:: physical_view.png
 
 Deployment Workflow Overview
 -----------------------------
