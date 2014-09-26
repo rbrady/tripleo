@@ -1,119 +1,19 @@
-Setup os-collect-config to run as a system service. By default it will
-run os-refresh-config on any changes.
+Common element for swift elements
 
-Configuration
--------------
-
-Heat Metadata can be used to configure os-collect-config:
-
-    os-collect-config:
-      command: os-refresh-config
-      cachedir: /var/run/os-collect-config
-      collectors:
-        - heat_local
-        - ec2
-        - cfn
-      polling_interval: 300
-      cfn:
-        metadata_url: http://foo:8000/v1
-        heat_metadata_hint: /var/lib/heat-cfntools/cfn-metadata-server
-        stack_name: required-stack-name
-        access_key_id: abcdefghijklmnop091234
-        secret_access_key: fffeeeeddddccccaaaa99999
-        path: ThisResource.Metadata
-      ec2:
-        metadata_url: http://169.254.169.254/latest/meta-data
-      heat_local:
-        path: /var/lib/heat-cfntools/cfn-init-data
-
-Note that `metadata_url` is optional, as it should be determined by the
-file `heat_metadata_hint` refers to. This file is injected by Heat via
-cloud-init at first boot. Those two parameters are the only optional
-parameters. All of the others are required for the cfn data source
-to function.
-
-`ec2` and `heat_local` do not require any configuration to work.
-
-Typically the cfn collector is configured via EC2 metadata in a Heat
-template:
-
-    Resources:
-      myserver:
-        Type: OS::Nova::Server
-        Properties:
-          ...
-        Metadata:
-          os-collect-config:
-            cfn:
-              access_key_id:
-                Ref: Key
-              path: MyServerConfig.Metadata
-              secret_access_key:
-                Fn::GetAtt:
-                - Key
-                - SecretAccessKey
-              stack_name:
-                Ref: AWS::StackName
-
-The EC2 collector takes this metadata, passes it to os-apply-config
-which in turn writes it out to /etc/os-collect-config.conf.
-
-Note that the configuration references some other resources - a key
-and access key, which are declared using:
-
-    Resources:
-      Key:
-        Properties:
-          UserName:
-            Ref: User
-        Type: AWS::IAM::AccessKey
-      User:
-        Properties:
-          Policies:
-          - Ref: AccessPolicy
-        Type: AWS::IAM::User
-
-Note also that the IAM::User references an access policy which should
-look like:
-
-    Resources:
-      AccessPolicy:
-        Properties:
-          AllowedResources:
-          - MyServerConfig
-        Type: OS::Heat::AccessPolicy
-
-and, finally, the crucial bit is the MyServerConfig policy which is
-referenced in the cfn collector configuration and the access policy:
-
-    Resources:
-      MyServerConfig:
-        Metadata:
-          os-collect-config:
-            cfn:
-              access_key_id:
-                Ref: Key
-              path: MyServerConfig.Metadata
-              secret_access_key:
-                Fn::GetAtt:
-                - Key
-                - SecretAccessKey
-              stack_name:
-                Ref: AWS::StackName
-          nova:
-            ...
-          keystone:
-            ...
-        Properties:
-          ImageId: '0'
-          InstanceType: foo
-        Type: AWS::AutoScaling::LaunchConfiguration
-
-Essentially, this AutoScaling::LaunchConfiguration resource is a bunch
-of boilerplate gunk to provide a metadata container from where the
-os-collect-config cfn collector can pull configuration which will be
-applied by os-apply-config. There's a os-collect-config section to
-ensure the configuration from the EC2 metadata doesn't get
-overwritten. And the rest is dummy values for the
-LaunchConfiguration's required properties.
-
+    
+swift:
+    devices: r1z<zone number>-192.0.2.6:%PORT%/d1
+      - A comma separated list of swift storage devices to place in the ring
+        file. 
+      - This MUST be present in order for o-r-c to successfully complete.
+    zones:
+      - Servers are divided amongst separate zones if the swift.zones
+        metadata is greater than the default of 1.  Servers are placed in zones
+        depending on their rank in the scaled-out list of Swift servers in the
+        yaml template used to build the overcloud stack.  The scaleout rank N
+        is: SwiftStorage|controller<N>.  The appropriate zone is calculated as:
+        zone = N % swift.zones + 1.
+      - To enable this calculation, the devices data takes the form of:
+          r1z%<controller or SwiftStorage><N>%-192.0.2.6:%PORT%/d1
+    hash: randomstring
+      - A hash used to salt paths on storage hosts
