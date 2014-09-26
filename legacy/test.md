@@ -14,12 +14,12 @@ Environment Variables For Image Creation
 The following environment variables are used for registering a RHEL instance
 with either the Red Hat Customer Portal or Satellite 6.
 
-### REG\_ACTIVATION\_KEY
+#### REG\_ACTIVATION\_KEY ####
 Attaches existing subscriptions as part of the registration process. The
 subscriptions are pre-assigned by a vendor or by a systems administrator
 using Subscription Asset Manager.
 
-### REG_AUTO_ATTACH
+### REG_AUTO_ATTACH ###
 Automatically attaches the best-matched compatible subscription. This is
 good for automated setup operations, since the system can be configured
 in a single step.
