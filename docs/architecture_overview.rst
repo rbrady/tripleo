@@ -74,7 +74,7 @@ Deployment to physical servers happens through a collaboration of Heat, Nova, Ne
 
     heat stack-create workload-cloud -f workload-heat-template.yml
 
-For each node in the Workload cloud, the Heat engine asks Nova-API to create an instance using the appropriate image as specified in the Heat template and then Nova-Scheduler selects a machine to deploy to.  Nova-Compute then uses the `Ironic Service <http://docs.openstack.org/developer/ironic/deploy/user-guide.html>`_ as a bare metal hypervisor to deploy that image to the selected machine.  The Ironic service uses PXE and IPMI to complete the deployment of the image. See Ironic’s “`Understanding Baremetal Deployment <http://docs-draft.openstack.org/04/94604/7/check/gate-ironic-docs/06f28b4/doc/build/html/deploy/user-guide.html#understanding-bare-metal-deployment>`_” for further details.
+For each node in the Workload cloud, the Heat engine asks Nova-API to create an instance using the appropriate image as specified in the Heat template and then Nova-Scheduler selects a machine to deploy to.  Nova-Compute then uses the `Ironic Service <http://docs.openstack.org/developer/ironic/deploy/user-guide.html>`_ as a bare metal hypervisor to deploy that image to the selected machine.  The Ironic service uses PXE and IPMI to complete the deployment of the image. See Ironic’s “`Understanding Baremetal Deployment <http://docs.openstack.org/developer/ironic/deploy/user-guide.html#understanding-bare-metal-deployment>`_” for further details.
 
 
 3. **Per-node setup**
