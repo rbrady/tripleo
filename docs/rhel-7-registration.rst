@@ -45,6 +45,7 @@ TODO: Add info about adding json metadata to env var for heat deployment of inst
 
 Notes
 ===============================
-If you're mixing and matching methods between image creation and boot time, you must set the server_url and base_url.
+If you're mixing and matching methods between image creation and boot time, you must set the server url and base url.  If you're not sure which method was used in building the images, you might want to include the information just to be safe.
+
 
 
