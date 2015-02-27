@@ -1,0 +1,51 @@
+#!/bin/bash
+
+set -eux
+set -o pipefail
+
+# Install repo file for Delorean master packages
+# Pin to an older repo for now because newer openstack-keystone requires a
+# newer and not yet avaialable python-pycadf.
+export DELOREAN_REPO=${DELOREAN_REPO:-"http://104.130.230.24/centos70/05/d8/05d8a6b82bf1f16c064bbee84d95c88b73030fae_3ea5fe35/delorean.repo"}
+sudo curl -o /etc/yum.repos.d/delorean.repo $DELOREAN_REPO
+
+# Install repo file for Delorean el7 midstream packages built from
+# rdo-management.
+export DELOREAN_RHEL7_REPO=${DELOREAN_RHEL7_REPO:-"http://ec2-52-1-152-252.compute-1.amazonaws.com/repos/c3/69/c369e612c3fd9d0f33da27374947619c2184d24d_af0320b0/delorean.repo"}
+sudo curl -o /etc/yum.repos.d/delorean-rdo-management.repo $DELOREAN_RHEL7_REPO
+# We can't have 2 yum repos called delorean though, so we must rename this one
+sudo sed -i 's/delorean/delorean-rdo-management/' /etc/yum.repos.d/delorean-rdo-management.repo
+
+# Delorean requires RDO
+if ! rpm -q rdo-release; then
+    sudo yum install -y https://rdo.fedorapeople.org/rdo-release.rpm
+fi
+
+if ! rpm -q epel-release; then
+    sudo yum install -y http://mirrors.einstein.yu.edu/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
+fi
+
+# rhos-release is also required, otherwise we have no base RHEL repositories to
+# pull any dependencies from (without using subscription-manager anyway).
+sudo rpm -Uvh --force http://rhos-release.virt.bos.redhat.com/repos/rhos-release/rhos-release-latest.noarch.rpm
+export RUN_RHOS_RELEASE=${RUN_RHOS_RELEASE:-"1"}
+if [ "$RUN_RHOS_RELEASE" = "1" ]; then
+    sudo rhos-release 6 -d
+fi
+# Ideally though, we don't want to end up with any RHOS packages installed, so
+# we disable the poodle repo.
+sudo yum-config-manager --disable rhelosp-6.0-poodle
+
+# install yum-plugin-priorities
+rpm -Uvh http://download.lab.bos.redhat.com/rel-eng/RHEL-7.1-RC-2.1/staging/dist/cdn-rpms/rhel-7-server-optional-rpms__7.1__x86_64/yum-plugin-priorities-1.1.31-29.el7.noarch.rpm
+
+# set the priorities in the repo files
+# 1. rdo-delorean
+# 2. delorean
+# 3. rdo-release
+# 4. rhelosp6
+# 5. rhel7
+# 6. epel
+
+# delorean-rdo-management should default to priority=1
+sudo sed -i "s/priority=1/priority=2/" /etc/yum.repos.d/delorean.repo

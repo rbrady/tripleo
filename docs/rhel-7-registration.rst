@@ -1,6 +1,8 @@
 RHEL 7 Registration Overview
 ================================
-TODO: Add some info about registration process during image creation and during boot using customer portal or satellite6.
+To use RHEL7 for the overcloud nodes, it will need to be registered with either the Red Hat Customer Portal or a
+Satellite instance.
+https://github.com/openstack/diskimage-builder/blob/master/elements/rhel-common/README.md
 
 Building Images
 ===============================
