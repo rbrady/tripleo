@@ -37,7 +37,7 @@ fi
 sudo yum-config-manager --disable rhelosp-6.0-poodle
 
 # install yum-plugin-priorities
-rpm -Uvh http://download.lab.bos.redhat.com/rel-eng/RHEL-7.1-RC-2.1/staging/dist/cdn-rpms/rhel-7-server-optional-rpms__7.1__x86_64/yum-plugin-priorities-1.1.31-29.el7.noarch.rpm
+sudo rpm -Uvh http://download.lab.bos.redhat.com/rel-eng/RHEL-7.1-RC-2.1/staging/dist/cdn-rpms/rhel-7-server-optional-rpms__7.1__x86_64/yum-plugin-priorities-1.1.31-29.el7.noarch.rpm
 
 # set the priorities in the repo files
 # 1. rdo-delorean
