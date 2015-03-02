@@ -3,14 +3,6 @@
 set -eux
 set -o pipefail
 
-# Install some needed dependencies for instack-undercloud
-sudo yum -y install \
-    diskimage-builder \
-    openstack-tripleo-image-elements \
-    openstack-tripleo-heat-templates \
-    openstack-tripleo \
-    instack
-
 sudo yum -y install git
 
 # os-cloud-config is broken in Delorean packaging right now, b/c it's missing
@@ -26,21 +18,10 @@ if ! rpm -q python-zope-interface; then
     sudo yum install -y http://mirrors.kernel.org/fedora//releases/20/Everything/x86_64/os/Packages/p/python-zope-interface-4.0.5-2.fc20.x86_64.rpm
 fi
 
-# pip install hardware for not until python-hardware is packaged
-sudo pip install hardware
-
 # tripleo-puppet-elements is not yet in Delorean, so just git clone for now
 if [ ! -d "tripleo-puppet-elements" ]; then
     git clone http://git.openstack.org/openstack/tripleo-puppet-elements
 else
     echo "WARNING##################################:"
     echo "tripleo-puppet-elements directory already exists, not recloning"
-fi
-
-# git clone instack-undercloud since we're not using packages for that yet
-if [ ! -d "instack-undercloud" ]; then
-    git clone http://github.com/rdo-management/instack-undercloud
-else
-    echo "WARNING##################################:"
-    echo "instack-undercloud directory already exists, not recloning"
 fi
