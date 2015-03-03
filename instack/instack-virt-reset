@@ -1,0 +1,12 @@
+#!/bin/bash
+
+set -eux
+set -o pipefail
+
+# undefine and destroy virsh vm
+sudo virsh undefine instack
+sudo virsh destroy instack
+
+# remove files
+sudo rm -rf /var/lib/libvirt/images/instack.qcow2
+sudo rm -rf /home/stack/instack.qcow2
