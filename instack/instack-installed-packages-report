@@ -1,0 +1,8 @@
+#! /bin/bash
+set -eu
+set -o pipefail
+
+echo "REPO\tPACKAGE\n"
+for pkg in $(yum list | grep "\(instack\|openstack\|ceilometer\|heat\|neutron\|ironic\|nova\|tripleo\|tuskar\|oslo\|netifaces\|hardware\|pexpect\|stevedore\|diskimage\)" | awk '{print $1}'); do
+    repoquery $pkg --queryformat "%{repoid}\t%{name}-%{version}-%{release}"
+done
