@@ -3,10 +3,18 @@
 set -eux
 set -o pipefail
 
-# undefine and destroy virsh vm
-sudo virsh undefine instack
-sudo virsh destroy instack
+function vm_delete(){
+    sudo virsh undefine $1
+    sudo virsh destroy $1
+}
 
-# remove files
+# delete instack vm and remove its files
+vm_delete instack
 sudo rm -rf /var/lib/libvirt/images/instack.qcow2
 sudo rm -rf /home/stack/instack.qcow2
+
+# delete all of the baremetal vms
+for i in $(seq 0 3); do
+    vm_delete baremetal_$i
+done
+
