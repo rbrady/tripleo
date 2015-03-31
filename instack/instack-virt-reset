@@ -4,8 +4,8 @@ set -eux
 set -o pipefail
 
 function vm_delete(){
-    sudo virsh undefine $1
-    sudo virsh destroy $1
+    sudo virsh undefine $1 || true
+    sudo virsh destroy $1 || true
 }
 
 # delete instack vm and remove its files
