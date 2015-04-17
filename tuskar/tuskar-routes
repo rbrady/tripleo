@@ -1,0 +1,8 @@
+#!/bin/bash
+set -eux
+set -o pipefail
+
+BM_NETWORK_CIDR=192.0.2.0/24
+ROUTE_DEV=virbr0
+SEED_IP=$(arp -n | grep virbr0 | awk '{print $1;}')
+ip route replace $BM_NETWORK_CIDR dev $ROUTE_DEV via $SEED_IP
