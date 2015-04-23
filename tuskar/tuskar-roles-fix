@@ -1,0 +1,15 @@
+#!/bin/bash
+set -eux
+set -o pipefail
+
+PLAN_ID=$(tuskar plan-show overcloud | awk '$2=="uuid" {print $4}')
+CONTROLLER_ID=$(tuskar role-list | awk '$4=="Controller" {print $2}')
+COMPUTE_ID=$(tuskar role-list | awk '$4=="Compute" {print $2}')
+SWIFT_ID=$(tuskar role-list | awk '$4=="Swift-Storage" {print $2}')
+CINDER_ID=$(tuskar role-list | awk '$4=="Cinder-Storage" {print $2}')
+CEPH_ID=$(tuskar role-list | awk '$4=="Ceph-Storage" {print $2}')
+tuskar plan-add-role $PLAN_ID -r $CONTROLLER_ID
+tuskar plan-add-role $PLAN_ID -r $COMPUTE_ID
+tuskar plan-add-role $PLAN_ID -r $SWIFT_ID
+tuskar plan-add-role $PLAN_ID -r $CINDER_ID
+tuskar plan-add-role $PLAN_ID -r $CEPH_ID
