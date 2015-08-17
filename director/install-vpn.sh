@@ -11,8 +11,8 @@ sudo chmod 0440 /etc/sudoers.d/stack
 
 # install openvpn
 sudo rpm -Uvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
-sudo yum install openvpn
-sudo yum remove epel-release
+sudo yum install -y openvpn
+sudo yum remove -y epel-release
 
 # if the archive isn't available, attempt to download it
 if [ -n "$OPENVPN_ARCHIVE" ]; then
