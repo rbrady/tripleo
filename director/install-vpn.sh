@@ -10,7 +10,7 @@ echo "stack ALL=(root) NOPASSWD:ALL" | sudo tee -a /etc/sudoers.d/stack
 sudo chmod 0440 /etc/sudoers.d/stack
 
 # install openvpn
-sudo rpm -Uvh http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm || true
+sudo rpm -Uvh --replacepkgs http://dl.fedoraproject.org/pub/epel/7/x86_64/e/epel-release-7-5.noarch.rpm
 sudo yum install -y openvpn
 sudo yum remove -y epel-release
 
