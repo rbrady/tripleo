@@ -18,7 +18,7 @@ def get_swiftclient():
 
 
 def create_plan(plan_name, templates_path):
-    """* **create_plan(plan_name, templates)**: Creates a plan by creating a Swift
+    """create_plan(plan_name, templates)**: Creates a plan by creating a Swift
     container matching plan_name, and placing the tripleo-heat-templates and an
     environment file into it.  Although we will not deal with updates and
     versioning with this spec, we will create the Swift container with object
