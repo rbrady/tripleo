@@ -1,0 +1,35 @@
+---
+version: '2.0'
+name: tripleo.dev.v1
+description: TripleO development workflows
+
+workflows:
+
+  foo:
+
+    input:
+      - name
+      - backup_name: <% $.get('name') %>
+
+    tasks:
+
+      echo:
+        action: std.echo
+        input:
+           output: <% $.get('backup_name', 'BOOM') %>
+        publish:
+            output_value: <% task(echo).result %>
+
+  bar:
+
+    input:
+      - name
+      - backup_name: <% $.name %>
+
+    tasks:
+
+      echo:
+        action: std.echo
+        input:
+           output: <% $.backup_name %>
+
